@@ -21,7 +21,7 @@ const AiTools = () => {
         {AiToolsData.map((tool, index) => (
           <div
             key={index}
-            className="p-8 m-4 max-w-xs rounded-lg bg-[#FDFDFE] shadow-lg border border-gray-100 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+            className=" w-[300px] p-8 m-4 max-w-xs rounded-lg bg-[#FDFDFE] shadow-lg border border-gray-100 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
             onClick={() => user && navigate(tool.path)}
           >
             <tool.Icon

@@ -3,19 +3,41 @@ import { dummyCreationData } from "../assets/assets";
 import { Gem, Sparkles } from "lucide-react";
 import { Protect } from "@clerk/clerk-react";
 import CreationItem from "../components/CreationItem";
+import axios from "axios";
+import {toast} from "react-hot-toast";
+import { useAuth } from "@clerk/clerk-react";
+
+axios.defaults.baseURL= import.meta.env.VITE_BASE_URL;
 
 const Dashboard = () => {
   const [creations, setCreations] = useState([]);
+  const [loading,setLoading] = useState(true);
+
+  const {getToken} = useAuth();
 
   const getCreationsData = async () => {
-    setCreations(dummyCreationData);
+    try {
+      setLoading(true);
+      const {data} = await axios.get('/api/user/get-user-creations',{
+        headers:{Authorization:`Bearer ${await getToken()}`}
+      })
+      
+      if(data.success){
+        setCreations(data.creations);
+      }else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+        toast.error(error.message);
+    }
+     setLoading(false);
   };
 
   useEffect(() => {
     getCreationsData();
   }, []);
 
-  return (
+  return !loading?(
     <div className="h-full overflow-y-scroll p-6">
       <div className="flex justify-start gap-4 flex-wrap">
         {/*Total Creations Card*/}
@@ -45,13 +67,18 @@ const Dashboard = () => {
       </div>
 
       <div className="space-y-3">
-        <p className="mt-6 mb-4">Recent Creations</p>
+        <p className="mt-6 mb-4 font-bold">Recent Creations</p>
         {creations.map((item) => (
           <CreationItem key={item.id} item={item} />
         ))}
       </div>
     </div>
-  );
+  ):(
+    <div className="h-full flex justify-center items-center">
+      <span className="w-10 h-10 my-1 rounded-full border-3 border-primary border-t-transparent animate-spin"></span>
+    </div>
+  )
+  
 };
 
 export default Dashboard;

@@ -228,7 +228,7 @@ export const reviewResume = async (req, res) => {
       });
     }
 
-   if(file.size > 5 * 1024 * 1024){
+   if(resume.size > (5 * 1024 * 1024)){
     return res.json({success:false, message:"File size exceeds the limit of 5 MB"})
    }
 
@@ -249,13 +249,13 @@ export const reviewResume = async (req, res) => {
         },
       ],
       temperature: 0.7,
-      max_tokens: 1000,
+      max_tokens: 2000,
     });
 
     const content = response.choices[0].message.content;
     
-    await sql`INSERT INTO creations (user_id,prompt,content,type,publish)
-    VALUES(${userId},'Review the Resume',${content},'resume-review',)`;
+    await sql`INSERT INTO creations (user_id,prompt,content,type)
+    VALUES(${userId},'Review the Resume',${content},'resume-review')`;
 
     res.json({ success: true, content });
   } catch (error) {

@@ -1,30 +1,55 @@
-import express from "express";
-import cors from "cors";
 import "dotenv/config";
-import { clerkMiddleware, requireAuth } from "@clerk/express";
-import aiRouter from "./routes/aiRoutes.js";
-import connectCloudinary from "./config/cloudinary.js";
-import userRouter from "./routes/userRoutes.js";
+import app from "./app.js";
+import http from "http";
 
-const app = express();
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const { sequelize } = require('./models/index.cjs');
 
-await connectCloudinary();
+const port = process.env.PORT || 3000;
+const module = require.main;
+if (require.main === module) {
+  const server = http.Server(app);
 
-app.use(cors());
-app.use(express.json());
-app.use(clerkMiddleware());
+  const startServer = async () => {
+    try {
+      await sequelize.authenticate();
+      console.log('Connection to PostgreSQL has been established successfully.');
 
-app.get("/", (req, res) => {
-  res.send("server is live");
-});
+      server.listen(port, () => {
+        console.log(`App is listening on port ${port}`);
+      });
 
-app.use(requireAuth());
+      const exitHandler = () => {
+        if (server) {
+          server.close(() => {
+            console.log("Server closed");
+            process.exit(1);
+          });
+        } else {
+          process.exit(1);
+        }
+      };
 
-app.use("/api/ai", aiRouter);
-app.use("/api/user",userRouter);
+      const unexpectedErrorHandler = (error) => {
+        console.log(error);
+        exitHandler();
+      };
 
-const PORT = process.env.PORT || 3000;
+      process.on("uncaughtException", unexpectedErrorHandler);
+      process.on("unhandledRejection", unexpectedErrorHandler);
+      process.on("SIGTERM", () => {
+        console.log("SIGTERM received");
+        if (server) {
+          server.close();
+        }
+      });
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on Port ${PORT}`);
-});
+    } catch (error) {
+      console.error('Unable to connect to the databases:', error);
+      process.exit(1);
+    }
+  };
+
+  startServer();
+}

@@ -1,9 +1,9 @@
 // Middleware to check userId and hasPremiumPlan
-
+import asyncHandler from "express-async-handler"
 import { clerkClient } from "@clerk/express";
 
-export const auth = async (req, res, next) => {
-  try {
+export const auth = asyncHandler(async (req, res, next) => {
+
     const { userId, has } = await req.auth();
     const hasPremiumPlan = await has({ plan: "premium" });
 
@@ -22,7 +22,7 @@ export const auth = async (req, res, next) => {
 
     req.plan = hasPremiumPlan ? "premium" : "free";
     next();
-  } catch (error) {
-    res.json({ success: false, message: error.message });
-  }
-};
+ 
+    
+  
+});

@@ -7,7 +7,7 @@ import { useUser, SignIn } from "@clerk/clerk-react";
 
 const Layout = () => {
   const navigate = useNavigate();
-  const [sidebar, setSidebar] = useState(false);
+  // const [sidebar, setSidebar] = useState(false);
   const { user } = useUser();
 
   return user ? (
@@ -19,20 +19,20 @@ const Layout = () => {
           alt=""
           onClick={() => navigate("/")}
         />
-        {sidebar ? (
+        {/* {sidebar ? (
           <X
             onClick={() => setSidebar(false)}
-            className="w-6 h-6 text-gray-600 sm:hidden"
+            className="w-6 h-6 text-grey-600 cursor-pointer"
           />
         ) : (
           <Menu
-            className="w-6 h-6 text-gray-600 sm:hidden"
+            className="w-6 h-6 text-gray-600 cursor-pointer"
             onClick={() => setSidebar(true)}
           />
-        )}
+        )} */}
       </nav>
       <div className="flex-1 w-full flex h-[calc(100vh-64px)]">
-        <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
+        <Sidebar  />
         <div className="flex-1 bg-[#F4F7Fb]">
           <Outlet />
         </div>

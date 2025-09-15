@@ -3,6 +3,7 @@ import Markdown from "react-markdown";
 
 const CreationItem = ({ item }) => {
   const [expanded, setExpanded] = useState(false);
+
   return (
     <div
       onClick={() => setExpanded(!expanded)}
@@ -11,8 +12,8 @@ const CreationItem = ({ item }) => {
       <div className="flex justify-between items-center gap-4">
         <div>
           <h2>{item.prompt}</h2>
-          <p>
-            {item.type} - {new Date(item.created_at).toLocaleDateString()}
+          <p className="text-gray-400">
+            {new Date(item?.createdAt).toLocaleDateString()}
           </p>
         </div>
         <button className="bg-[#EFF6FF] border border-[#BFDBFE] text-[#1E40AF] px-4 py-1 rounded-full">

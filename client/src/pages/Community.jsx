@@ -11,6 +11,7 @@ const Community = () => {
   const [creations, setCreation] = useState([]);
   const { user } = useUser();
   const [loading,setLoading] = useState(false);
+  const [likeLoading,setLikeLoading] = useState(false)
   
 
   const {getToken} = useAuth();
@@ -36,19 +37,36 @@ const Community = () => {
 
   const toggleLike = async(id)=>{
     try {
+      setLikeLoading(true); 
       const{data} = await axios.post("/api/user/toggle-like-button",{id},{
         headers:{Authorization:`Bearer ${await getToken()}`}
       })
 
-      if(data.success){
-        toast.success(data.message);
-        await fetchCreations();
-      }else{
-        toast.error(data.message)
-      }
-      
-    } catch (error) {
-        toast.error(error.message);
+      if (data.statusCode === 200) {
+      const isNowLiked = data.liked;
+      setCreation((prevCreations) =>prevCreations.map((creation) =>
+          creation.id === id?{
+                ...creation,
+                liked: isNowLiked,
+                likes: isNowLiked? creation.likes + 1: creation.likes - 1,
+              }
+            : creation
+        )
+      );
+      toast.success(`${isNowLiked?'Post Liked':'Post Disliked'}`)
+    } else {
+      toast.error("Unexpected response from server.");
+    }
+  } catch (error) {
+      if (error.response) {
+        toast.error(error.response.data.message);
+    } else if (error.request) {
+        toast.error("No response from server.");
+    } else {
+        toast.error("Unexpected error occurred.");
+    }
+    }finally{
+        setLikeLoading(false);
     }
   }
 
@@ -78,15 +96,16 @@ const Community = () => {
                 {creation.prompt}
               </p>
               <div className="flex gap-1 items-center">
-                <p>{creation.likes.length}</p>
+                <p>{creation.likes}</p>
                 
                 <Heart
                   className={`min-w-5 h-5 hover:scale-110 cursor-pointer ${
-                    creation.likes.includes(user.id)
+                    creation.liked
                       ? "fill-red-500 text-red-600"
                       : "text-white"
                   }`} 
                   onClick={()=>toggleLike(creation.id)}
+                  disabled={likeLoading}
                 />
                 
               </div>

@@ -59,7 +59,7 @@ const WriteArticle = () => {
         <input
           type="text"
           className=" w-full p-2 px-3 mt-2 outline-none text-sm rounded-md border border-gray-300"
-          placeholder="The future of Artificial intelligence is..."
+          placeholder="What do you want to write about?"
           required
           onChange={(e) => setInput(e.target.value)}
           value={input}

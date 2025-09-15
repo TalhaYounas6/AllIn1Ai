@@ -4,6 +4,7 @@ import "dotenv/config";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import connectCloudinary from "./config/cloudinary.js";
 import routes from "./routes/index.js"
+import errorHandler from "./controllers/error/errorController.js"
 
 
 const app = express();
@@ -34,6 +35,8 @@ app.get("/", (req, res) => {
 app.use(requireAuth());
 
 app.use(routes);
+
+app.use(errorHandler);
 
 export default app;
 

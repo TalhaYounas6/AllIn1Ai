@@ -53,3 +53,6 @@ if (require.main === module) {
 
   startServer();
 }
+
+export default app;
+//for vercel

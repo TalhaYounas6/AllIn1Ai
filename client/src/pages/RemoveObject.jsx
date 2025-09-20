@@ -45,6 +45,15 @@ const RemoveObject = () => {
     setLoading(false);
   };
 
+  const handleDownload = (imageUrl) => {
+    const link = document.createElement('a');
+    link.href = imageUrl; 
+    link.download = 'image.png'; 
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700">
       {/* left column */}
@@ -102,6 +111,7 @@ const RemoveObject = () => {
                 </div>):(
                   <div className="mt-4 h-full">
                     <img src={content}  crossOrigin="anonymous"  alt="image" className="w-full h-full"/>
+                    <button onClick={()=>handleDownload(content)} className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#00AD25] to-[#04FF50] text-white px-4 py-2 mt-6text-sm rounded-lg cursor-pointer">Download</button>
                   </div>
         )}
       </div>

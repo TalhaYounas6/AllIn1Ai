@@ -17,7 +17,12 @@ const RemoveObject = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-
+    const trimmedObj = object.trim();
+    const inputWords = trimmedObj.split(' ');
+    if(inputWords[1]){
+      toast.error("Only enter one word for the object to remove");
+      return;
+    }
     try {
 
       setLoading(true);
@@ -97,8 +102,11 @@ const RemoveObject = () => {
 
         {!content?(<div className="flex-1 flex justify-center items-center">
                   <div className="text-sm flex flex-col items-center gap-5 text-gray-400">
-                    <Scissors className="w-9 h-9" />
-                    <p>Upload an image and click "Remove Object" to get started</p>
+                     {
+                                    loading? <span className="w-7 h-7 my-1 rounded-full border-2 border-t-transparent animate-spin text-black"></span> :<><Scissors className="w-9 h-9" />
+                    <p>Upload an image and click "Remove Object" to get started</p></>
+                     }
+                    
                   </div>
                 </div>):(
                  <>

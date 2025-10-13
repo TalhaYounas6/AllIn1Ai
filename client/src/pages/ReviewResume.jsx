@@ -80,8 +80,11 @@ const ReviewResume = () => {
 
         {!content?(<div className="flex-1 flex justify-center items-center">
           <div className="text-sm flex flex-col items-center gap-5 text-gray-400">
-            <FileText className="w-9 h-9" />
-            <p>Upload an resume and click "Review Resume" to get started</p>
+            {
+                    loading? <span className="w-7 h-7 my-1 rounded-full border-2 border-t-transparent animate-spin text-black"></span> :<><FileText className="w-9 h-9" />
+            <p>Upload an resume and click "Review Resume" to get started</p></>
+            }
+            
           </div>
         </div>):(
           <div className="mt-3 h-full overflow-y-scroll text-sm text-slate-600">

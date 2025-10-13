@@ -36,6 +36,12 @@ app.use(requireAuth());
 
 app.use(routes);
 
+app.all('*', (req, res, next) => {
+  const err = new Error(`Can't find ${req.originalUrl} on the server!`);
+  err.statusCode = 404;
+  next(err); 
+});
+
 app.use(errorHandler);
 
 export default app;

@@ -42,7 +42,7 @@ const GenerateImage = () => {
 
 
   return (
-    <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700">
+    <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700 pb-17">
       {/* left column */}
       <form
         onSubmit={onSubmitHandler}
@@ -107,22 +107,25 @@ const GenerateImage = () => {
         <div className="flex items-center gap-3">
           <Image className="w-5 h-5 test-[#00AD25]" />
           <h1 className="text-xl font-semibold">Generated Image</h1>
+          <span>{content?<button onClick={()=>handleDownload(content)} className="flex-1 gap-2 bg-primary text-white px-3 py-1 text-sm rounded-lg cursor-pointer lg:ml-40">Download</button>:<div></div>}</span>
+          
         </div>
 
-        {!content? (<div className="flex-1 flex justify-center items-center">
+        {loading?(
+          <div className="flex-1 flex justify-center items-center flex-col gap-5">
+            <span className="w-7 h-7 my-1 rounded-full border-2 border-t-transparent animate-spin text-black"></span> 
+            <p className="text-gray-400">This may take a few seconds</p>
+          </div>
+        ):!content? (
+        <div className="flex-1 flex justify-center items-center">
           <div className="text-sm flex flex-col items-center gap-5 text-gray-400">
-            {
-            loading? <span className="w-7 h-7 my-1 rounded-full border-2 border-t-transparent animate-spin text-black"></span> :<> <Hash className="w-9 h-9" />
-            <p>Describe an image and click "Generate Image" to get started</p></>
-            }
-            
+             <Hash className="w-9 h-9" /><p>Enter a description and click "Generate Image" to get started</p>
           </div>
         </div>):(
           <>
               <div className="mt-4 h-full">
                 <img src={content} alt="image" className="w-full h-full"/>
               </div>
-               <button onClick={()=>handleDownload(content)} className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#00AD25] to-[#04FF50] text-white px-4 py-2 mt-6text-sm rounded-lg cursor-pointer mt-2">Download</button>
          </>
         )}
       </div>

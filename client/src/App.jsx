@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes,useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Layout from "./pages/Layout";
 import Dashboard from "./pages/Dashboard";
@@ -14,13 +14,23 @@ import { useAuth } from "@clerk/clerk-react";
 import {Toaster} from 'react-hot-toast'
 const App = () => {
 
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      document.body.style.overflowY = "auto"; // enable browser scroll
+    } else {
+      document.body.style.overflowY = "hidden"; // disable browser scroll
+    }
+  }, [location.pathname]);
+
   //  const {getToken} = useAuth();
   //  useEffect(()=>{
   //   getToken().then((token)=>console.log(token))
   //  },[])
   return (
-
     
+
     <div>
       <Toaster />
       <Routes>

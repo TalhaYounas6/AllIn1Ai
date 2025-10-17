@@ -24,13 +24,15 @@ const navItems = [
   { to: "/ai/community", label: "Community", Icon: Users },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({sidebar,setSidebar}) => {
   const { user } = useUser();
   const { signOut, openUserProfile } = useClerk();
 
   return (
     <div
-      className='w-60 bg-white border-r border-gray-200 flex flex-col justify-between items-center absolute sm:relative top-0 bottom-0'
+        className={`fixed top-14 bottom-0 left-0 z-10 bg-white border-r border-gray-200 
+    w-[85%] sm:w-80 transition-transform duration-300 ease-in-out
+    ${sidebar ? "translate-x-0" : "max-sm:-translate-x-full"}`}
     >
       <div className="my-7 w-full">
         <img
@@ -45,7 +47,7 @@ const Sidebar = () => {
               key={to}
               to={to}
               end={to === "/ai"}
-              // onClick={() => setSidebar(false)}
+              onClick={() => setSidebar(false)}
               className={({ isActive }) =>
                 `px-3.5 py-2.5 flex items-center gap-3 rounded ${
                   isActive

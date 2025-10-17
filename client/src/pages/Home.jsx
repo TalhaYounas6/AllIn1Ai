@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 
 const Home = () => {
   return (
+    
     <>
       <Navbar />
       <Hero />
@@ -14,6 +15,7 @@ const Home = () => {
       <Plan />
       <Footer />
     </>
+ 
   );
 };
 

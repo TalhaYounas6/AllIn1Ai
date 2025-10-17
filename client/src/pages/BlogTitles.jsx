@@ -49,7 +49,7 @@ const BlogTitles = () => {
   };
 
   return (
-    <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700">
+    <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700 pb-17">
       {/* left column */}
       <form
         onSubmit={onSubmitHandler}
@@ -102,18 +102,19 @@ const BlogTitles = () => {
           <h1 className="text-xl font-semibold">Generated Title</h1>
         </div>
 
-        {
-          !content?(<div className="flex-1 flex justify-center items-center">
+        {loading?(
+          <div className="flex-1 flex justify-center items-center flex-col gap-5">
+            <span className="w-7 h-7 my-1 rounded-full border-2 border-t-transparent animate-spin text-black"></span> 
+            <p className="text-gray-400">This may take a few seconds</p>
+          </div>
+        ):!content?(
+        <div className="flex-1 flex justify-center items-center">
           <div className="text-sm flex flex-col items-center gap-5 text-gray-400">
-            {
-                loading? <span className="w-7 h-7 my-1 rounded-full border-2 border-t-transparent animate-spin text-black"></span> :<> <Hash className="w-9 h-9" /> <p>Enter a topic and click "Generate title" to get started</p></>
-            }
-            
+            <Hash className="w-9 h-9" /> <p>Enter a topic and click "Generate title" to get started</p>
           </div>
         </div>):(
             <div className="mt-3 h-full overflow-y-scroll text-sm text-slate-600 py-5">
              <div className="reset-tw"><Markdown>{content}</Markdown></div>
-              
             </div>
         )
         }

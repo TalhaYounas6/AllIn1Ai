@@ -25,7 +25,7 @@ const WriteArticle = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const prompt = `Write an article about ${input} about this topic in ${selectedLength.text}`
+      const prompt = `Write an article about ${input} about this topic in ${selectedLength.text} keep your thoughts and content strictly inside the word limit.`
       const {data} = await axios.post("/api/ai/generate-article",{ prompt,  length: selectedLength.length},{
         headers:{ Authorization: `Bearer ${await getToken()}`}
       })
@@ -44,7 +44,7 @@ const WriteArticle = () => {
   };
 
   return (
-    <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700">
+    <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700 pb-17">
       {/* left column */}
       <form
         onSubmit={onSubmitHandler}
@@ -97,14 +97,16 @@ const WriteArticle = () => {
           <h1 className="text-xl font-semibold">Generated Article</h1>
         </div>
 
-        {!content?(
+        {loading?(
+          <div className="flex-1 flex justify-center items-center flex-col gap-5">
+            <span className="w-7 h-7 my-1 rounded-full border-2 border-t-transparent animate-spin text-black"></span> 
+            <p className="text-gray-400">This may take a few seconds</p>
+          </div>
+        ):!content?(
           <div className="flex-1 flex justify-center items-center">
           <div className="text-sm flex flex-col items-center gap-5 text-gray-400">
-            {
-                                loading? <span className="w-7 h-7 my-1 rounded-full border-2 border-t-transparent animate-spin text-black"></span> :<><Edit className="w-9 h-9" />
-            <p>Enter a topic and click "Generate Article" to get started</p></>
-             }
-            
+           <Edit className="w-9 h-9" />
+            <p>Enter a topic and click "Generate Article" to get started</p>          
           </div>
         </div>
         ):(

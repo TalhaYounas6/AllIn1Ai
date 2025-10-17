@@ -77,8 +77,8 @@ const Community = () => {
   }, [user]);
 
   return !loading?(
-    <div className="flex-1 h-full flex flex-col gap-4 p-6 font-bold">
-      <div className="bg-white h-full w-full rounded-xl overflow-y-scroll">
+    <div className="flex-1 h-full flex flex-col gap-4 p-6 font-bold pb-17">
+      <div className="bg-white h-full w-full rounded-xl overflow-y-scroll pb-17">
         {creations.map((creation, index) => (
           <div
             key={index}

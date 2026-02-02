@@ -28,8 +28,10 @@ app.use(cors());
 app.use(express.json());
 app.use(clerkMiddleware());
 
+
+
 app.get("/", (req, res) => {
-  res.send("server is live");
+  res.send("server is livee");
 });
 
 app.use(requireAuth());

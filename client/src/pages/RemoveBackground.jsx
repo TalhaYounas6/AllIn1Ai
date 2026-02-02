@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Edit, Eraser, Hash, Sparkles,Image } from "lucide-react";
+import { Edit, Eraser, Hash, Sparkles,Image,XCircle } from "lucide-react";
 import axios from 'axios';
 import { useAuth } from "@clerk/clerk-react";
 import {toast} from "react-hot-toast";
@@ -12,6 +12,7 @@ const RemoveBackground = () => {
   const [input, setInput] = useState("");
   const [loading,setLoading] = useState(false);
   const [content,setContent] = useState("");
+  const [imagePreview,setImagePreview] = useState(null);
   const imageInputref = useRef(null);
 
 
@@ -28,8 +29,6 @@ const RemoveBackground = () => {
         headers:{Authorization: `Bearer ${await getToken()}`}
       })
 
-      
-
       if(data.success){
         setContent(data.content);
         
@@ -45,9 +44,28 @@ const RemoveBackground = () => {
     setLoading(false);
   };
 
+  const handleImageChange = (e)=>{
+    const file = e.target.files[0];
+    if(!file.type.startsWith("image/")){
+      toast.error("Please select an image file");
+      return;
+    }
+
+    if(file){
+      setImagePreview(URL.createObjectURL(file));
+      // setContent(file);
+      setInput(file);
+    }
+  }
+  
+
+  const removeImage = () => {
+    setImagePreview(null);
+    if (imageInputref.current) imageInputref.current.value = "";
+  };
+
   return (
     <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700 pb-17">
-      {/* left column */}
       <form
         onSubmit={onSubmitHandler}
         className="w-full max-w-lg p-4 bg-white rounded-lg border border-gray-200"
@@ -57,6 +75,26 @@ const RemoveBackground = () => {
           <h1 className="text-xl font-semibold">Background Removal</h1>
         </div>
         <p className="mt-6 text-sm font-medium">Upload Image</p>
+        {/* left column */}
+      {imagePreview && (
+        <div className="mb-3 flex items-center gap-3 mt-1">
+          <div className="relative">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
+            />
+            <button
+              onClick={removeImage}
+              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-600
+              flex items-center justify-center cursor-pointer"
+              type="button"
+            >
+              <XCircle className="size-5" />
+            </button>
+          </div>
+        </div>
+      )}
 
         <input
           type="file"
@@ -65,7 +103,7 @@ const RemoveBackground = () => {
           className="hidden"
           required
           ref={imageInputref}
-          onChange={(e) => setInput(e.target.files[0])}
+          onChange={handleImageChange}
         />
         <button
             type="button"
@@ -105,8 +143,8 @@ const RemoveBackground = () => {
           </div>
         </div>):(
           <>
-          <div className="mt-4 h-full">
-            <img src={content} alt="image" className="w-full h-full"/>
+          <div className="flex-1 mt-4 overflow-hidden flex items-center justify-center">
+            <img src={content} alt="image" className="max-h-full w-full object-contain rounded-lg"/>
           </div>
           </>
         )}

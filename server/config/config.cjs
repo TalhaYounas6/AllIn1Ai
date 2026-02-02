@@ -8,8 +8,14 @@ module.exports = {
       ssl: {
         require: true,
         rejectUnauthorized: false
-      }
-    }
+      },
+     
+    connectTimeout: 60000
+    },
+    pool: {
+    acquire: 60000, 
+    idle: 10000
+  }
   },
 
   production: {

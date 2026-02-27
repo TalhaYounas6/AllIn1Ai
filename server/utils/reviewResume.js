@@ -20,7 +20,7 @@ export const reviewResume = asyncHandler(async(resume)=>{
 
 
     const response = await AI.chat.completions.create({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       messages: [
         {
           role: "user",
@@ -28,7 +28,7 @@ export const reviewResume = asyncHandler(async(resume)=>{
         },
       ],
       temperature: 0.7,
-      max_tokens: 2000,
+      max_tokens: 8192,
     });
 
     const content = response.choices[0].message.content;

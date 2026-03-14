@@ -3,21 +3,50 @@ import {STATUS_CODES,TEXTS} from "../../config/constants.js"
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const { Creation, Like } = require('../../models/index.cjs');
+import { Op } from "sequelize";
 import asyncHandler from "express-async-handler";
+
 
 
 
 export const getUserCreations = asyncHandler(async(req,res)=>{
         try {
             const {userId} = req.auth();
-            // const creations = await sql`SELECT * from creations where user_id=${userId} ORDER BY created_at DESC`;
+            const {cursor} = req.query;
+            const limit = 10;
+
+            let whereClause = { user_id: userId};
+
+            const totalCount = await Creation.count({
+                where : {user_id :userId }
+            });
+
+            if (cursor){
+                whereClause.createdAt = {
+                    [Op.lt] : new Date(cursor)
+                }
+            }
 
             const creations = await Creation.findAll({
-                        where: { user_id: userId },
+                        where: whereClause,
                         order: [["createdAt", "DESC"]],
+                        limit : limit + 1
                         });
 
-            res.json({success:true,creations})
+
+            let nextCursor = null;
+            let hasMore = false;
+            
+            if(creations.length > limit){
+                hasMore = true;
+                creations.pop();
+                nextCursor = creations[creations.length-1].createdAt;
+            }else if(creations.length > 0){
+                hasMore = false;
+                nextCursor = creations[creations.length-1].createdAt;
+            }
+
+            res.json({success:true,creations,totalCount,nextCursor,hasMore})
         } catch (error) {
             return res.json({success:false, message: error.message})
         }

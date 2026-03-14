@@ -3,6 +3,7 @@ import Markdown from "react-markdown";
 
 const CreationItem = ({ item }) => {
   const [expanded, setExpanded] = useState(false);
+  let result = item.prompt.split('about')[0];
 
   return (
     <div
@@ -11,7 +12,7 @@ const CreationItem = ({ item }) => {
     >
       <div className="flex justify-between items-center gap-4">
         <div>
-          <h2>{item.prompt}</h2>
+          <h2>{result}</h2>
           <p className="text-gray-400">
             {new Date(item?.createdAt).toLocaleDateString()}
           </p>

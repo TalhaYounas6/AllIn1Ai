@@ -3,16 +3,16 @@ import Markdown from "react-markdown";
 
 const CreationItem = ({ item }) => {
   const [expanded, setExpanded] = useState(false);
-  let result = item.prompt.split('about')[0];
+  let parts = item.prompt.split('about')[1]?.trim() || "";
+  
 
   return (
     <div
-      onClick={() => setExpanded(!expanded)}
-      className="p-4 max-w-5xl text-sm bg-white border border-gray-200 rounded-lg cursor-pointer"
+      className="p-4 max-w-5xl text-sm bg-white border border-gray-200 rounded-lg "
     >
-      <div className="flex justify-between items-center gap-4">
+      <div className="flex justify-between items-center gap-4 cursor-pointer" onClick={() => setExpanded(!expanded)}>
         <div>
-          <h2>{result}</h2>
+          <h2>{item.type == "article"?parts:item.prompt}</h2>
           <p className="text-gray-400">
             {new Date(item?.createdAt).toLocaleDateString()}
           </p>
